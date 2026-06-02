@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oula Mardawi - Skills</title>
+
+  <style>
+
+    body {
+      background: #c0c0c0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      color: #000000;
+      margin: 0;
+      padding: 0;
+    }
+
+    .window {
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #808080;
+      border-bottom: 2px solid #808080;
+      background: #c0c0c0;
+      margin: 10px;
+    }
+
+    .title-bar {
+      background: #000080;
+      color: white;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 3px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      letter-spacing: 1px;
+    }
+
+    .win-btn {
+      width: 16px;
+      height: 14px;
+      background: #c0c0c0;
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-right: 1px solid #808080;
+      border-bottom: 1px solid #808080;
+      font-size: 9px;
+      text-align: center;
+      line-height: 14px;
+    }
+
+    /* ---- NAVBAR (same on every page) ---- */
+    .navbar {
+      background: #c0c0c0;
+      border-bottom: 2px solid #808080;
+      padding: 4px 8px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .nav-item {
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #808080;
+      border-bottom: 2px solid #808080;
+      padding: 2px 10px;
+      font-size: 12px;
+      font-family: 'Courier New', Courier, monospace;
+      text-decoration: none;
+      color: #000000;
+      background: #c0c0c0;
+    }
+
+    .nav-item:hover {
+      background: #000080;
+      color: white;
+    }
+
+    .nav-item.active {
+      /* Pressed-in effect for current page */
+      border-top: 2px solid #808080;
+      border-left: 2px solid #808080;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+    }
+
+    /* ---- SECTION TITLE ---- */
+    .section-title {
+      background: #000080;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 3px 6px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    /* ---- TWO COLUMN GRID ---- */
+    .grid-2 {
+      /* Splits content into 2 equal columns */
+      display: grid;
+      grid-template-columns: 1fr 1fr;  /* 1fr = take equal share of space */
+      gap: 10px;                        /* space between columns */
+      margin-bottom: 14px;
+    }
+
+    /* On small screens, stack into 1 column */
+    @media (max-width: 600px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ---- SKILL CARD ---- */
+    .skill-card {
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #808080;
+      border-bottom: 2px solid #808080;
+      background: #d4d0c8;
+      padding: 10px 12px;
+    }
+
+    .skill-card-title {
+      /* The label at the top of each skill card */
+      font-weight: bold;
+      font-size: 12px;
+      color: #000080;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .skill-list {
+      /* The list of skills inside a card */
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .skill-list li {
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .skill-list li::before {
+      content: '> ';   /* adds > before each skill */
+      color: #000080;
+    }
+
+    /* ---- SKILL BAR ---- */
+    .skill-bar-row {
+      /* One skill with a progress bar */
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 11px;
+    }
+
+    .skill-bar-label {
+      min-width: 90px;   /* fixed width so all bars line up */
+      color: #000;
+    }
+
+    .skill-bar-track {
+      /* The grey background of the bar */
+      flex: 1;
+      height: 12px;
+      background: #808080;
+      border-top: 1px solid #404040;
+      border-left: 1px solid #404040;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+    }
+
+    .skill-bar-fill {
+      /* The filled (blue) part of the bar */
+      height: 100%;
+      background: #000080;
+    }
+
+    /* ---- PUBLICATION CARD ---- */
+    .pub-card {
+      border-top: 2px solid #808080;
+      border-left: 2px solid #808080;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      background: white;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #000080;
+      color: white;
+      font-size: 10px;
+      padding: 1px 6px;
+      margin-left: 4px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    hr.retro {
+      border: none;
+      border-top: 1px solid #808080;
+      border-bottom: 1px solid #ffffff;
+      margin: 8px 0;
+    }
+
+    .status-bar {
+      background: #c0c0c0;
+      border-top: 2px solid #808080;
+      padding: 3px 8px;
+      font-size: 11px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .status-cell {
+      border-top: 1px solid #808080;
+      border-left: 1px solid #808080;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+      padding: 1px 8px;
+    }
+
+    a { color: #000080; }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="window">
+
+    <!-- Title bar -->
+    <div class="title-bar">
+      <span>&#9632; OULA_MARDAWI.HTM — Skills &amp; Research</span>
+      <div style="display:flex; gap:2px;">
+        <div class="win-btn">_</div>
+        <div class="win-btn">&#9633;</div>
+        <div class="win-btn">&#10005;</div>
+      </div>
+    </div>
+
+    <!-- Navbar — Skills is active this time -->
+    <div class="navbar">
+      <a class="nav-item" href="page1.html">[ Home ]</a>
+      <a class="nav-item" href="experience.html">[ Experience ]</a>
+      <a class="nav-item active" href="skills.html">[ Skills ]</a>
+      <!-- active is now on Skills because we are ON the skills page -->
+    </div>
+
+    <div style="padding: 10px;">
+
+      <!-- ===== SKILL BARS ===== -->
+      <!-- These give a visual sense of proficiency level -->
+      <div class="section-title">[ PROFICIENCY.DAT ]</div>
+
+      <div style="margin-bottom: 14px;">
+
+        <div class="skill-bar-row">
+          <span class="skill-bar-label">Cybersecurity</span>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" style="width: 95%;"></div>
+            <!-- width = proficiency percentage. Change this number to adjust the bar -->
+          </div>
+          <span style="font-size:10px; min-width:30px;">95%</span>
+        </div>
+
+        <div class="skill-bar-row">
+          <span class="skill-bar-label">AI / ML</span>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" style="width: 85%;"></div>
+          </div>
+          <span style="font-size:10px; min-width:30px;">85%</span>
+        </div>
+
+        <div class="skill-bar-row">
+          <span class="skill-bar-label">C / C++</span>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" style="width: 80%;"></div>
+          </div>
+          <span style="font-size:10px; min-width:30px;">80%</span>
+        </div>
+
+        <div class="skill-bar-row">
+          <span class="skill-bar-label">Swift / iOS</span>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" style="width: 75%;"></div>
+          </div>
+          <span style="font-size:10px; min-width:30px;">75%</span>
+        </div>
+
+        <div class="skill-bar-row">
+          <span class="skill-bar-label">Python / ML</span>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" style="width: 80%;"></div>
+          </div>
+          <span style="font-size:10px; min-width:30px;">80%</span>
+        </div>
+
+        <div class="skill-bar-row">
+          <span class="skill-bar-label">Networking</span>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" style="width: 90%;"></div>
+          </div>
+          <span style="font-size:10px; min-width:30px;">90%</span>
+        </div>
+
+      </div>
+
+      <!-- ===== SKILL CARDS GRID ===== -->
+      <div class="section-title">[ SKILLS.DAT ]</div>
+
+      <div class="grid-2">
+        <!-- grid-2 = 2 columns. Each .skill-card fills one cell -->
+
+        <div class="skill-card">
+          <div class="skill-card-title">[CYBERSECURITY]</div>
+          <ul class="skill-list">
+            <li>Metasploit, Nmap, Kali Linux</li>
+            <li>Wireshark, OpenVas, Greenbone</li>
+            <li>Firewalls, SIEM, OWASP, IAM</li>
+            <li>Autopsy, FTK Imager (Forensics)</li>
+            <li>Cisco Packet Tracer, Docker</li>
+          </ul>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card-title">[PROGRAMMING]</div>
+          <ul class="skill-list">
+            <li>Swift, Java, C, C++</li>
+            <li>SQL, Git, React Native</li>
+            <li>Machine Learning, Data Analytics</li>
+            <li>OOP, Logic Design</li>
+            <li>AI Research &amp; Evaluation</li>
+          </ul>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card-title">[TOOLS]</div>
+          <ul class="skill-list">
+            <li>JIRA, Slack, Confluence</li>
+            <li>GitHub, Sourcetree</li>
+            <li>Node.js, MongoDB, Firebase</li>
+            <li>Linux, Figma</li>
+          </ul>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card-title">[LANGUAGES]</div>
+          <ul class="skill-list">
+            <li>Arabic &nbsp;&nbsp; [##########] Native</li>
+            <li>English &nbsp; [##########] Fluent</li>
+            <li>French &nbsp;&nbsp; [###&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;] Beginner</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- ===== PUBLICATION ===== -->
+      <div class="section-title">[ PUBLICATIONS.BIB ]</div>
+
+      <div class="pub-card">
+        <div style="font-size: 12px; margin-bottom: 6px;">
+          <strong>Journal Paper</strong>
+          <span class="badge">Q1 JOURNAL</span>
+          <span class="badge">2025</span>
+        </div>
+        <div style="font-size: 12px; line-height: 1.7;">
+          O. Mardawi,
+          <em>"Evaluating the Effectiveness of LLMs versus Machine Learning in Detecting Phishing Emails"</em>,
+          <strong>Algorithms</strong>, 2025.
+        </div>
+        <div style="margin-top: 6px; font-size: 11px;">
+          <a href="#">[View Paper]</a>
+        </div>
+      </div>
+
+      <!-- ===== AWARDS ===== -->
+      <div class="section-title">[ AWARDS.TXT ]</div>
+
+      <div style="font-size: 12px; line-height: 2;">
+        <span style="color:#000080;">&#9658;</span>
+        <strong>Chevening Scholarship</strong> — Top 2% of 77,000+ global applicants &nbsp;
+        <span class="badge">2023–2024</span>
+        <br>
+        <span style="color:#000080;">&#9658;</span>
+        <strong>AI Safety Collab (ENAIS)</strong> — 5th place out of 26 projects &nbsp;
+        <span class="badge">2025</span>
+        <br>
+        <span style="color:#000080;">&#9658;</span>
+        <strong>Erasmus+ Scholarship</strong> — Selected from 150+ students &nbsp;
+        <span class="badge">2021</span>
+        <br>
+        <span style="color:#000080;">&#9658;</span>
+        <strong>University of Warwick Award</strong> — 100 hours skills development &nbsp;
+        <span class="badge">2024</span>
+      </div>
+
+    </div>
+    <!-- End window content -->
+
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span class="status-cell">&copy; 1995 Oula Mardawi</span>
+      <span class="status-cell">Skills loaded successfully</span>
+      <span class="status-cell"><a href="experience.html">&lt; Experience</a></span>
+    </div>
+
+  </div>
+
+</body>
+</html>
