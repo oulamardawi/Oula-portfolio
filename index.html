@@ -1,11 +1,272 @@
 <!DOCTYPE html>
+<!-- DOCTYPE tells the browser: "this is an HTML file" -->
+
 <html lang="en">
+<!-- <html> is the root tag. Everything goes inside it. lang="en" means the language is English -->
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oula Mardawi</title>
+<!-- <head> contains invisible settings about the page (title, styles, etc.) -->
+
+  <meta charset="UTF-8">
+  <!-- This makes sure special characters (like é, ñ, etc.) display correctly -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- This makes the page look good on mobile screens -->
+
+  <title>Oula Mardawi - Home</title>
+  <!-- This is what appears on the browser tab -->
+
+  <style>
+    /* Everything inside <style> is CSS — it controls how the page LOOKS */
+    /* CSS rule format:  selector { property: value; } */
+
+    body {
+      /* body = the whole visible page */
+      background: #c0c0c0;        /* grey background — classic Windows 95 color */
+      font-family: 'Courier New', Courier, monospace; /* terminal font */
+      font-size: 13px;
+      color: #000000;             /* black text */
+      margin: 0;
+      padding: 0;
+    }
+
+    .window {
+      /* .window = any element with class="window" */
+      /* This creates the raised Windows 95 box effect */
+      border-top: 2px solid #ffffff;    /* light border on top = looks raised */
+      border-left: 2px solid #ffffff;   /* light border on left */
+      border-right: 2px solid #808080;  /* dark border on right = shadow */
+      border-bottom: 2px solid #808080; /* dark border on bottom = shadow */
+      background: #c0c0c0;
+      margin: 10px;                     /* space around the window */
+    }
+
+    .title-bar {
+      /* The dark blue bar at the top of a window */
+      background: #000080;        /* dark blue */
+      color: white;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 3px 6px;
+      display: flex;              /* flex = puts children side by side */
+      justify-content: space-between; /* pushes title left, buttons right */
+      align-items: center;
+      letter-spacing: 1px;
+    }
+
+    .win-btn {
+      /* The little minimize/maximize/close buttons */
+      width: 16px;
+      height: 14px;
+      background: #c0c0c0;
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-right: 1px solid #808080;
+      border-bottom: 1px solid #808080;
+      font-size: 9px;
+      text-align: center;
+      line-height: 14px;
+      cursor: default;
+    }
+
+    .inset {
+      /* Creates a "sunken" / inset box effect — opposite of raised */
+      border-top: 2px solid #808080;
+      border-left: 2px solid #808080;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      background: white;
+      padding: 12px;
+    }
+
+    .section-title {
+      /* The dark blue label above each section */
+      background: #000080;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 3px 6px;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .content-section {
+      /* Wrapper around each section — adds space between them */
+      margin-bottom: 14px;
+    }
+
+    hr.retro {
+      /* A classic retro divider line (two lines = 3D effect) */
+      border: none;
+      border-top: 1px solid #808080;
+      border-bottom: 1px solid #ffffff;
+      margin: 8px 0;
+    }
+
+    a {
+      color: #000080; /* links are dark blue */
+    }
+
+    .status-bar {
+      /* The bar at the very bottom of the window */
+      background: #c0c0c0;
+      border-top: 2px solid #808080;
+      padding: 3px 8px;
+      font-size: 11px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .status-cell {
+      /* Each little cell in the status bar */
+      border-top: 1px solid #808080;
+      border-left: 1px solid #808080;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+      padding: 1px 8px;
+    }
+
+    .blink {
+      /* Makes text blink — very 90s! */
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; } /* at 50% of the animation, make it invisible */
+    }
+
+    marquee {
+      /* The scrolling text */
+      font-size: 11px;
+      color: #800000; /* dark red */
+      margin-top: 6px;
+    }
+
+  </style>
 </head>
+
 <body>
-    <h1>Oula Mardawi page on Cloudflare server-Hey Osse from my internet page</h1>
+<!-- <body> is where all the VISIBLE content goes -->
+
+  <!-- ===== MAIN WINDOW ===== -->
+  <div class="window">
+  <!-- <div> is just a box/container. class="window" applies our CSS styles to it -->
+
+    <!-- Title Bar -->
+    <div class="title-bar">
+      <span>&#9632; OULA_MARDAWI.HTM — Home Page</span>
+      <!-- &#9632; is an HTML code for the ■ square symbol -->
+      <div style="display:flex; gap:2px;">
+        <!-- style="..." is inline CSS — quick styles without going to the <style> block -->
+        <div class="win-btn">_</div>
+        <div class="win-btn">&#9633;</div>  <!-- &#9633; = □ square outline -->
+        <div class="win-btn">&#10005;</div> <!-- &#10005; = ✕ cross -->
+      </div>
+    </div>
+
+    <!-- Window content area -->
+    <div style="padding: 8px;">
+
+      <!-- ===== HEADER SECTION ===== -->
+      <div class="content-section">
+        <div class="inset" style="text-align: center;">
+        <!-- style="text-align: center;" centers everything inside this box -->
+
+          <!-- Name -->
+          <div style="font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #000080;">
+            OULA MARDAWI
+          </div>
+
+          <!-- Job title -->
+          <div style="font-size: 11px; color: #444; margin-top: 4px; letter-spacing: 2px;">
+            CYBERSECURITY ENGINEER &amp; AI SAFETY RESEARCHER
+            <!-- &amp; is how you write & in HTML. HTML uses & for special codes, so you escape it -->
+          </div>
+
+          <!-- Divider -->
+          <hr class="retro">
+
+          <!-- Contact info -->
+          <div style="font-size: 11px;">
+            Coventry, UK &nbsp;|&nbsp;
+            <!-- &nbsp; = non-breaking space. Adds a visible gap between items -->
+            +44 742 458 9001 &nbsp;|&nbsp;
+            <a href="mailto:mardawi.oula@gmail.com">mardawi.oula@gmail.com</a> &nbsp;|&nbsp;
+            <!-- href="mailto:..." makes clicking open the email app -->
+            <a href="https://linkedin.com" target="_blank">LinkedIn</a> &nbsp;|&nbsp;
+            <!-- target="_blank" opens the link in a NEW tab -->
+            <a href="https://mardawi.org" target="_blank">mardawi.org</a>
+          </div>
+
+          <!-- Scrolling marquee text — very 90s! -->
+          <marquee behavior="scroll" direction="left">
+            *** Chevening Scholar *** MSc Distinction @ University of Warwick ***
+            Published Researcher *** AI Safety Researcher *** Judge @ Oxford OXAIS 2025 ***
+          </marquee>
+
+        </div>
+      </div>
+      <!-- End of header section -->
+
+      <!-- ===== ABOUT SECTION ===== -->
+      <div class="content-section" id="about">
+      <!-- id="about" gives this section a unique name so you can link to it with #about -->
+
+        <div class="section-title">[ ABOUT.TXT ]</div>
+        <!-- This is the dark blue label above the section -->
+
+        <div class="inset">
+          <p style="line-height: 1.8; font-size: 12px;">
+          <!-- <p> = paragraph. line-height: 1.8 adds space between lines -->
+
+            Hello and welcome to my homepage! I am a Cybersecurity Engineer and
+            AI Safety Researcher with an MSc (Distinction) from the University of
+            Warwick and a BSc in Computer Engineering.
+
+            <br><br>
+            <!-- <br> = line break. Two <br> tags = blank line between paragraphs -->
+
+            I am a <strong>Chevening Scholar</strong>, published researcher, and
+            lecturer with experience spanning Palestine, the UK, France, and the USA.
+            <!-- <strong> makes text bold -->
+
+            <br><br>
+
+            My work sits at the intersection of
+            <strong>cybersecurity</strong>,
+            <strong>AI safety</strong>, and
+            <strong>education</strong>.
+            I have taught 700+ students, published in a Q1 journal, and judged
+            at the Oxford AI Safety Hackathon.
+
+          </p>
+        </div>
+      </div>
+      <!-- End of about section -->
+
+      <!-- ===== NAVIGATION HINT ===== -->
+      <div style="text-align: center; margin-top: 10px; font-size: 11px; color: #444;">
+        &gt; &gt; &gt;
+        <a href="experience.html">Go to Experience page</a>
+        <!-- This is how you link to another page! experience.html = the next page we'll build -->
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="skills.html">Go to Skills page</a>
+        &gt; &gt; &gt;
+      </div>
+
+    </div>
+    <!-- End of window content -->
+
+    <!-- ===== STATUS BAR ===== -->
+    <div class="status-bar">
+      <span class="status-cell">&copy; 1995 Oula Mardawi</span>
+      <!-- &copy; = © copyright symbol -->
+      <span class="status-cell">Made with Notepad</span>
+      <span class="status-cell"><span class="blink">&#9646;</span> Online</span>
+      <!-- &#9646; = ▮ block symbol -->
+    </div>
+
+  </div>
+  <!-- End of main window -->
+
 </body>
 </html>
