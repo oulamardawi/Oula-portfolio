@@ -1,415 +1,376 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Oula Mardawi - Skills</title>
+  <title>Oula Mardawi — Skills</title>
 
   <style>
-
     body {
-      background: #c0c0c0;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 13px;
-      color: #000000;
       margin: 0;
       padding: 0;
+      background: #c0c0c0;
+      color: #000;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 13px;
     }
 
     .window {
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
+      margin: 10px;
+      background: #c0c0c0;
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
       border-right: 2px solid #808080;
       border-bottom: 2px solid #808080;
-      background: #c0c0c0;
-      margin: 10px;
     }
 
     .title-bar {
-      background: #000080;
-      color: white;
-      font-size: 13px;
-      font-weight: bold;
-      padding: 3px 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
+      padding: 3px 6px;
+      background: #000080;
+      color: #fff;
+      font-weight: bold;
       letter-spacing: 1px;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 2px;
     }
 
     .win-btn {
       width: 16px;
       height: 14px;
       background: #c0c0c0;
-      border-top: 1px solid #ffffff;
-      border-left: 1px solid #ffffff;
+      border-top: 1px solid #fff;
+      border-left: 1px solid #fff;
       border-right: 1px solid #808080;
       border-bottom: 1px solid #808080;
+      color: #000;
       font-size: 9px;
       text-align: center;
-      line-height: 14px;
+      line-height: 12px;
     }
 
-    /* ---- NAVBAR (same on every page) ---- */
+    /* Navigation shared across all pages */
     .navbar {
-      background: #c0c0c0;
-      border-bottom: 2px solid #808080;
-      padding: 4px 8px;
       display: flex;
+      flex-wrap: wrap;
       gap: 4px;
+      padding: 5px 8px;
+      border-bottom: 2px solid #808080;
     }
 
     .nav-item {
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
+      padding: 3px 12px;
+      background: #c0c0c0;
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
       border-right: 2px solid #808080;
       border-bottom: 2px solid #808080;
-      padding: 2px 10px;
-      font-size: 12px;
-      font-family: 'Courier New', Courier, monospace;
+      color: #000;
       text-decoration: none;
-      color: #000000;
-      background: #c0c0c0;
     }
 
     .nav-item:hover {
       background: #000080;
-      color: white;
+      color: #fff;
     }
 
     .nav-item.active {
-      /* Pressed-in effect for current page */
       border-top: 2px solid #808080;
       border-left: 2px solid #808080;
-      border-right: 2px solid #ffffff;
-      border-bottom: 2px solid #ffffff;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
     }
 
-    /* ---- SECTION TITLE ---- */
-    .section-title {
+    /* Main content panel */
+    .content {
+      margin: 10px;
+      padding: 20px;
+      background: #fff;
+      border-top: 2px solid #808080;
+      border-left: 2px solid #808080;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+    }
+
+    .page-heading {
+      margin: 0 0 24px;
+      padding: 6px;
       background: #000080;
-      color: white;
+      color: #fff;
+      text-align: center;
       font-size: 12px;
-      font-weight: bold;
-      padding: 3px 6px;
       letter-spacing: 2px;
-      margin-bottom: 10px;
     }
 
-    /* ---- TWO COLUMN GRID ---- */
-    .grid-2 {
-      /* Splits content into 2 equal columns */
-      display: grid;
-      grid-template-columns: 1fr 1fr;  /* 1fr = take equal share of space */
-      gap: 10px;                        /* space between columns */
-      margin-bottom: 14px;
+    .section {
+      margin-bottom: 25px;
     }
 
-    /* On small screens, stack into 1 column */
-    @media (max-width: 600px) {
-      .grid-2 { grid-template-columns: 1fr; }
-    }
-
-    /* ---- SKILL CARD ---- */
-    .skill-card {
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
-      border-right: 2px solid #808080;
-      border-bottom: 2px solid #808080;
-      background: #d4d0c8;
-      padding: 10px 12px;
-    }
-
-    .skill-card-title {
-      /* The label at the top of each skill card */
-      font-weight: bold;
-      font-size: 12px;
+    .section-title {
+      margin: 0 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #808080;
       color: #000080;
-      margin-bottom: 6px;
+      font-size: 13px;
       letter-spacing: 1px;
     }
 
-    .skill-list {
-      /* The list of skills inside a card */
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .skill-list li {
-      font-size: 11px;
+    .skill-group {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px dotted #c0c0c0;
       line-height: 1.8;
     }
 
-    .skill-list li::before {
-      content: '> ';   /* adds > before each skill */
+    .skill-name {
+      color: #000080;
+      font-weight: bold;
+    }
+
+    .skill-details {
+      color: #333;
+    }
+
+    .item {
+      position: relative;
+      margin: 0 0 14px;
+      padding-left: 18px;
+      line-height: 1.8;
+    }
+
+    .item::before {
+      content: ">";
+      position: absolute;
+      left: 0;
       color: #000080;
     }
 
-    /* ---- SKILL BAR ---- */
-    .skill-bar-row {
-      /* One skill with a progress bar */
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-      font-size: 11px;
+    .item-title {
+      font-weight: bold;
     }
 
-    .skill-bar-label {
-      min-width: 90px;   /* fixed width so all bars line up */
-      color: #000;
-    }
-
-    .skill-bar-track {
-      /* The grey background of the bar */
-      flex: 1;
-      height: 12px;
-      background: #808080;
-      border-top: 1px solid #404040;
-      border-left: 1px solid #404040;
-      border-right: 1px solid #ffffff;
-      border-bottom: 1px solid #ffffff;
-    }
-
-    .skill-bar-fill {
-      /* The filled (blue) part of the bar */
-      height: 100%;
-      background: #000080;
-    }
-
-    /* ---- PUBLICATION CARD ---- */
-    .pub-card {
-      border-top: 2px solid #808080;
-      border-left: 2px solid #808080;
-      border-right: 2px solid #ffffff;
-      border-bottom: 2px solid #ffffff;
-      background: white;
-      padding: 10px 12px;
-      margin-bottom: 10px;
+    .item-meta {
+      color: #555;
+      font-size: 12px;
     }
 
     .badge {
       display: inline-block;
+      margin-left: 5px;
+      padding: 1px 5px;
       background: #000080;
-      color: white;
+      color: #fff;
       font-size: 10px;
-      padding: 1px 6px;
-      margin-left: 4px;
-      font-family: 'Courier New', Courier, monospace;
     }
 
-    hr.retro {
-      border: none;
-      border-top: 1px solid #808080;
-      border-bottom: 1px solid #ffffff;
-      margin: 8px 0;
+    a {
+      color: #000080;
     }
 
+    a:hover {
+      color: #0000cc;
+    }
+
+    /* Classic Windows status bar */
     .status-bar {
-      background: #c0c0c0;
-      border-top: 2px solid #808080;
-      padding: 3px 8px;
-      font-size: 11px;
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
+      padding: 4px 8px 10px;
+      font-size: 11px;
     }
 
     .status-cell {
+      padding: 2px 8px;
       border-top: 1px solid #808080;
       border-left: 1px solid #808080;
-      border-right: 1px solid #ffffff;
-      border-bottom: 1px solid #ffffff;
-      padding: 1px 8px;
+      border-right: 1px solid #fff;
+      border-bottom: 1px solid #fff;
     }
 
-    a { color: #000080; }
+    @media (max-width: 600px) {
+      .window {
+        margin: 5px;
+      }
 
+      .content {
+        margin: 6px;
+        padding: 16px 12px;
+      }
+
+      .skill-group {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <main class="window">
 
-  <div class="window">
+    <!-- Windows-style title bar -->
+    <header class="title-bar">
+      <span>■ OULA_MARDAWI.HTM — Skills</span>
 
-    <!-- Title bar -->
-    <div class="title-bar">
-      <span>&#9632; OULA_MARDAWI.HTM — Skills &amp; Research</span>
-      <div style="display:flex; gap:2px;">
+      <div class="window-controls" aria-hidden="true">
         <div class="win-btn">_</div>
-        <div class="win-btn">&#9633;</div>
-        <div class="win-btn">&#10005;</div>
+        <div class="win-btn">□</div>
+        <div class="win-btn">×</div>
       </div>
-    </div>
+    </header>
 
-    <!-- Navbar — Skills is active this time -->
-    <div class="navbar">
+    <!-- Main navigation -->
+    <nav class="navbar" aria-label="Main navigation">
       <a class="nav-item" href="index.html">[ Home ]</a>
       <a class="nav-item" href="experience.html">[ Experience ]</a>
       <a class="nav-item active" href="skills.html">[ Skills ]</a>
-      <!-- active is now on Skills because we are ON the skills page -->
-    </div>
+    </nav>
 
-    <div style="padding: 10px;">
+    <section class="content">
 
-      <!-- ===== SKILL BARS ===== -->
-      <!-- These give a visual sense of proficiency level -->
-      <div class="section-title">[ PROFICIENCY.DAT ]</div>
+      <h1 class="page-heading">[ SKILLS.DAT ] — Technical Profile</h1>
 
-      <div style="margin-bottom: 14px;">
+      <!-- Technical skills -->
+      <section class="section">
+        <h2 class="section-title">[ TECHNICAL SKILLS ]</h2>
 
-        <div class="skill-bar-row">
-          <span class="skill-bar-label">Cybersecurity</span>
-          <div class="skill-bar-track">
-            <div class="skill-bar-fill" style="width: 95%;"></div>
-            <!-- width = proficiency percentage. Change this number to adjust the bar -->
+        <div class="skill-group">
+          <div class="skill-name">Cybersecurity</div>
+          <div class="skill-details">
+            Metasploit, Nmap, Kali Linux, Wireshark, firewalls,
+            SIEM, OWASP, IAM, OpenVAS, Greenbone
           </div>
-          <span style="font-size:10px; min-width:30px;">95%</span>
         </div>
 
-        <div class="skill-bar-row">
-          <span class="skill-bar-label">AI / ML</span>
-          <div class="skill-bar-track">
-            <div class="skill-bar-fill" style="width: 85%;"></div>
+        <div class="skill-group">
+          <div class="skill-name">Digital Forensics</div>
+          <div class="skill-details">
+            Autopsy, FTK Imager
           </div>
-          <span style="font-size:10px; min-width:30px;">85%</span>
         </div>
 
-        <div class="skill-bar-row">
-          <span class="skill-bar-label">C / C++</span>
-          <div class="skill-bar-track">
-            <div class="skill-bar-fill" style="width: 80%;"></div>
+        <div class="skill-group">
+          <div class="skill-name">Programming</div>
+          <div class="skill-details">
+            C, C++, Java, Swift, SQL, Python, OOP
           </div>
-          <span style="font-size:10px; min-width:30px;">80%</span>
         </div>
 
-        <div class="skill-bar-row">
-          <span class="skill-bar-label">Swift / iOS</span>
-          <div class="skill-bar-track">
-            <div class="skill-bar-fill" style="width: 75%;"></div>
+        <div class="skill-group">
+          <div class="skill-name">AI &amp; Machine Learning</div>
+          <div class="skill-details">
+            Machine Learning, Data Analytics, AI Research &amp; Evaluation
           </div>
-          <span style="font-size:10px; min-width:30px;">75%</span>
         </div>
 
-        <div class="skill-bar-row">
-          <span class="skill-bar-label">Python / ML</span>
-          <div class="skill-bar-track">
-            <div class="skill-bar-fill" style="width: 80%;"></div>
+        <div class="skill-group">
+          <div class="skill-name">Networking &amp; Systems</div>
+          <div class="skill-details">
+            Cisco Packet Tracer, Linux, Docker
           </div>
-          <span style="font-size:10px; min-width:30px;">80%</span>
         </div>
 
-        <div class="skill-bar-row">
-          <span class="skill-bar-label">Networking</span>
-          <div class="skill-bar-track">
-            <div class="skill-bar-fill" style="width: 90%;"></div>
+        <div class="skill-group">
+          <div class="skill-name">Development Tools</div>
+          <div class="skill-details">
+            Git, GitHub, Sourcetree, JIRA, Slack, Confluence, Figma
           </div>
-          <span style="font-size:10px; min-width:30px;">90%</span>
         </div>
 
-      </div>
+        <div class="skill-group">
+          <div class="skill-name">Web &amp; Databases</div>
+          <div class="skill-details">
+            React Native, Node.js, MongoDB, Firebase
+          </div>
+        </div>
+      </section>
 
-      <!-- ===== SKILL CARDS GRID ===== -->
-      <div class="section-title">[ SKILLS.DAT ]</div>
+      <!-- Languages -->
+      <section class="section">
+        <h2 class="section-title">[ LANGUAGES.TXT ]</h2>
 
-      <div class="grid-2">
-        <!-- grid-2 = 2 columns. Each .skill-card fills one cell -->
-
-        <div class="skill-card">
-          <div class="skill-card-title">[CYBERSECURITY]</div>
-          <ul class="skill-list">
-            <li>Metasploit, Nmap, Kali Linux</li>
-            <li>Wireshark, OpenVas, Greenbone</li>
-            <li>Firewalls, SIEM, OWASP, IAM</li>
-            <li>Autopsy, FTK Imager (Forensics)</li>
-            <li>Cisco Packet Tracer, Docker</li>
-          </ul>
+        <div class="skill-group">
+          <div class="skill-name">Arabic</div>
+          <div class="skill-details">Native</div>
         </div>
 
-        <div class="skill-card">
-          <div class="skill-card-title">[PROGRAMMING]</div>
-          <ul class="skill-list">
-            <li>Swift, Java, C, C++</li>
-            <li>SQL, Git, React Native</li>
-            <li>Machine Learning, Data Analytics</li>
-            <li>OOP, Logic Design</li>
-            <li>AI Research &amp; Evaluation</li>
-          </ul>
+        <div class="skill-group">
+          <div class="skill-name">English</div>
+          <div class="skill-details">Fluent</div>
         </div>
 
-        <div class="skill-card">
-          <div class="skill-card-title">[TOOLS]</div>
-          <ul class="skill-list">
-            <li>JIRA, Slack, Confluence</li>
-            <li>GitHub, Sourcetree</li>
-            <li>Node.js, MongoDB, Firebase</li>
-            <li>Linux, Figma</li>
-          </ul>
+        <div class="skill-group">
+          <div class="skill-name">French</div>
+          <div class="skill-details">Beginner</div>
+        </div>
+      </section>
+
+      <!-- Publication -->
+      <section class="section">
+        <h2 class="section-title">[ PUBLICATIONS.BIB ]</h2>
+
+        <div class="item">
+          <div class="item-title">
+            O. Mardawi — "Evaluating the Effectiveness of LLMs versus
+            Machine Learning in Detecting Phishing Emails"
+          </div>
+
+          <div class="item-meta">
+            Algorithms · 2025
+            <span class="badge">Journal Paper</span>
+          </div>
+
+          <!-- Replace # with the actual paper URL -->
+          <a href="#">[ View Paper ]</a>
+        </div>
+      </section>
+
+      <!-- Awards -->
+      <section class="section">
+        <h2 class="section-title">[ AWARDS.TXT ]</h2>
+
+        <div class="item">
+          <span class="item-title">Chevening Scholarship</span>
+          <span class="item-meta">— 2023–2024</span>
         </div>
 
-        <div class="skill-card">
-          <div class="skill-card-title">[LANGUAGES]</div>
-          <ul class="skill-list">
-            <li>Arabic &nbsp;&nbsp; [##########] Native</li>
-            <li>English &nbsp; [##########] Fluent</li>
-            <li>French &nbsp;&nbsp; [###&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;] Beginner</li>
-          </ul>
+        <div class="item">
+          <span class="item-title">AI Safety Collab (ENAIS)</span>
+          <span class="item-meta">— 5th place out of 26 projects, 2025</span>
         </div>
 
-      </div>
-
-      <!-- ===== PUBLICATION ===== -->
-      <div class="section-title">[ PUBLICATIONS.BIB ]</div>
-
-      <div class="pub-card">
-        <div style="font-size: 12px; margin-bottom: 6px;">
-          <strong>Journal Paper</strong>
-          <span class="badge">Q1 JOURNAL</span>
-          <span class="badge">2025</span>
+        <div class="item">
+          <span class="item-title">Erasmus+ Scholarship</span>
+          <span class="item-meta">— 2021</span>
         </div>
-        <div style="font-size: 12px; line-height: 1.7;">
-          O. Mardawi,
-          <em>"Evaluating the Effectiveness of LLMs versus Machine Learning in Detecting Phishing Emails"</em>,
-          <strong>Algorithms</strong>, 2025.
+
+        <div class="item">
+          <span class="item-title">University of Warwick Award</span>
+          <span class="item-meta">— 2024</span>
         </div>
-        <div style="margin-top: 6px; font-size: 11px;">
-          <a href="#">[View Paper]</a>
-        </div>
-      </div>
+      </section>
 
-      <!-- ===== AWARDS ===== -->
-      <div class="section-title">[ AWARDS.TXT ]</div>
-
-      <div style="font-size: 12px; line-height: 2;">
-        <span style="color:#000080;">&#9658;</span>
-        <strong>Chevening Scholarship</strong> — Top 2% of 77,000+ global applicants &nbsp;
-        <span class="badge">2023–2024</span>
-        <br>
-        <span style="color:#000080;">&#9658;</span>
-        <strong>AI Safety Collab (ENAIS)</strong> — 5th place out of 26 projects &nbsp;
-        <span class="badge">2025</span>
-        <br>
-        <span style="color:#000080;">&#9658;</span>
-        <strong>Erasmus+ Scholarship</strong> — Selected from 150+ students &nbsp;
-        <span class="badge">2021</span>
-        <br>
-        <span style="color:#000080;">&#9658;</span>
-        <strong>University of Warwick Award</strong> — 100 hours skills development &nbsp;
-        <span class="badge">2024</span>
-      </div>
-
-    </div>
-    <!-- End window content -->
+    </section>
 
     <!-- Status bar -->
-    <div class="status-bar">
-      <span class="status-cell">&copy; 1995 Oula Mardawi</span>
+    <footer class="status-bar">
+      <span class="status-cell">© 1995 Oula Mardawi</span>
       <span class="status-cell">Skills loaded successfully</span>
-      <span class="status-cell"><a href="experience.html">&lt; Experience</a></span>
-    </div>
+      <span class="status-cell">
+        <a href="experience.html">&lt; Experience</a>
+      </span>
+    </footer>
 
-  </div>
-
+  </main>
 </body>
 </html>
