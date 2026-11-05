@@ -494,6 +494,9 @@
 
     }
 
+    [hidden] {
+      display: none !important;
+    }
 
 
     .page-link:hover {
@@ -657,7 +660,14 @@
       <div class="form-actions"><button class="retro-button" type="submit">💾 Save Paper</button><button class="retro-button" id="cancel-button" type="button">Cancel</button></div>
     </form>
     <div class="table-scroll"><table class="paper-table">
-      <thead><tr><th>Paper Name</th><th>My Summary</th><th>Actions</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Paper Name</th>
+        <th>My Summary</th>
+        <th id="actions-heading" hidden>Actions</th>
+      </tr>
+    </thead>
+
       <tbody id="paper-list"></tbody>
     </table></div>
     <p class="empty" id="empty-message">No papers added yet. Click + Add Paper to begin.</p>
@@ -665,84 +675,336 @@
   </section>
   <footer class="status-bar"><span class="status-cell">© 2026 Oula Mardawi</span><span class="status-cell">Made with HTML, CSS &amp; JavaScript</span><span class="status-cell">Online</span></footer>
 </main>
+
+<!--
+  SUPABASE JAVASCRIPT LIBRARY
+  Loads the tools needed to communicate with Supabase.
+-->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
 <script>
 (() => {
-  const KEY = 'oulaPortfolioPapers';
-  const form = document.getElementById('paper-form');
-  const tbody = document.getElementById('paper-list');
-  const empty = document.getElementById('empty-message');
-  const nameInput = document.getElementById('paper-name');
-  const linkInput = document.getElementById('paper-link');
-  const summaryInput = document.getElementById('paper-summary');
+  /*
+   * SUPABASE CONNECTION
+   *
+   * Project URL identifies your Supabase project.
+   * Publishable key allows browser access.
+   *
+   * Supabase Row Level Security (RLS) determines
+   * who can read, add, edit, or delete papers.
+   */
+  const SUPABASE_URL =
+    "https://lpmpfzscpniihiyjyvcy.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_6iIxK1xrvdpFG5EAanC0Xw_tgXK97_7";
+
+  const ADMIN_ID =
+    "3a4df040-bb80-44dd-9c54-4216f4a06561";
+
+  const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  /*
+   * GET EXISTING HTML ELEMENTS
+   */
+  const form = document.getElementById("paper-form");
+  const tbody = document.getElementById("paper-list");
+  const empty = document.getElementById("empty-message");
+  const nameInput = document.getElementById("paper-name");
+  const linkInput = document.getElementById("paper-link");
+  const summaryInput = document.getElementById("paper-summary");
+  const addButton = document.getElementById("add-button");
+
   let papers = [];
   let editing = null;
-  try { const stored = JSON.parse(localStorage.getItem(KEY) || '[]'); if (Array.isArray(stored)) papers = stored; } catch (error) { console.warn('Unable to load saved papers', error); }
-  function closeForm() { form.hidden = true; form.reset(); editing = null; }
-  function openForm() { form.hidden = false; nameInput.focus(); }
-  function persist() {
-    try { localStorage.setItem(KEY, JSON.stringify(papers)); return true; }
-    catch (error) { alert('Could not save papers in this browser. Check storage settings.'); return false; }
+  let isAdmin = false;
+
+  /*
+   * CREATE ADMIN LOGIN INTERFACE
+   *
+   * Visitors only see the Login button.
+   * You can sign in with your Supabase account.
+   */
+  const toolbar = document.querySelector(".archive-toolbar");
+
+  const loginButton = document.createElement("button");
+  loginButton.className = "retro-button";
+  loginButton.textContent = "Admin Login";
+  loginButton.type = "button";
+
+  const logoutButton = document.createElement("button");
+  logoutButton.className = "retro-button";
+  logoutButton.textContent = "Logout";
+  logoutButton.type = "button";
+
+  toolbar.prepend(loginButton, logoutButton);
+
+  /*
+   * CHECK AUTHENTICATION
+   *
+   * Supabase verifies who is signed in.
+   * We compare the signed-in user's UUID
+   * against your administrator UUID.
+   *
+   * This controls which buttons are visible.
+   * Actual write security is enforced by RLS.
+   */
+  async function checkAdmin() {
+  document.getElementById("actions-heading").hidden = !isAdmin;
+    const { data, error } = await db.auth.getUser();
+
+    isAdmin = !error &&
+      data.user?.id === ADMIN_ID;
+
+    loginButton.hidden = isAdmin;
+    logoutButton.hidden = !isAdmin;
+    addButton.hidden = !isAdmin;
+
+    if (!isAdmin) {
+      form.hidden = true;
+      editing = null;
+    }
+
+    render();
   }
+
+  /*
+   * ADMIN LOGIN
+   *
+   * Password is entered when logging in.
+   * It is never stored in the HTML source.
+   */
+  loginButton.addEventListener("click", async () => {
+    const email = prompt("Supabase admin email:");
+    if (!email) return;
+
+    const password = prompt("Supabase admin password:");
+    if (!password) return;
+
+    const { error } = await db.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      alert("Login failed: " + error.message);
+      return;
+    }
+
+    await checkAdmin();
+
+    if (!isAdmin) {
+      await db.auth.signOut();
+      await checkAdmin();
+      alert("This account is not the administrator.");
+    }
+  });
+
+  /*
+   * LOGOUT
+   */
+  logoutButton.addEventListener("click", async () => {
+    await db.auth.signOut();
+    await checkAdmin();
+  });
+
+  /*
+   * LOAD PAPERS FROM SUPABASE
+   *
+   * SELECT retrieves all papers from the
+   * public.papers database table.
+   *
+   * Visitors do not need to log in.
+   */
+  async function loadPapers() {
+    const { data, error } = await db
+      .from("papers")
+      .select("id, name, link, summary, created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(error);
+      empty.textContent = "Unable to load papers.";
+      empty.hidden = false;
+      return;
+    }
+
+    papers = data || [];
+    render();
+  }
+
+  /*
+   * DISPLAY PAPERS IN THE TABLE
+   *
+   * Everyone sees paper titles and summaries.
+   * Only the administrator sees Edit and Delete.
+   */
   function render() {
     tbody.replaceChildren();
+
     empty.hidden = papers.length > 0;
-    papers.forEach((paper, index) => {
-      const row = document.createElement('tr');
-      const nameCell = document.createElement('td');
-      const link = document.createElement('a');
+
+    papers.forEach(paper => {
+      const row = document.createElement("tr");
+
+      const nameCell = document.createElement("td");
+      const link = document.createElement("a");
+
       link.textContent = paper.name;
       link.href = paper.link;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
       nameCell.append(link);
-      const summaryCell = document.createElement('td');
+
+      const summaryCell = document.createElement("td");
       summaryCell.textContent = paper.summary;
-      const actions = document.createElement('td');
-      const edit = document.createElement('button');
-      edit.className = 'retro-button'; edit.type = 'button'; edit.textContent = 'Edit';
-      edit.addEventListener('click', () => {
-        editing = index;
-        nameInput.value = paper.name;
-        linkInput.value = paper.link;
-        summaryInput.value = paper.summary;
-        openForm();
-      });
-      const del = document.createElement('button');
-      del.className = 'retro-button'; del.type = 'button'; del.textContent = 'Delete';
-      del.addEventListener('click', () => {
-        if (!confirm('Delete this paper?')) return;
-        const previous = papers.slice();
-        papers.splice(index, 1);
-        if (!persist()) papers = previous;
-        render();
-      });
-      actions.append(edit, del);
-      row.append(nameCell, summaryCell, actions);
+
+      row.append(nameCell, summaryCell);
+
+      if (isAdmin) {
+        const actions = document.createElement("td");
+
+        const editButton = document.createElement("button");
+        editButton.className = "retro-button";
+        editButton.textContent = "Edit";
+
+        editButton.onclick = () => {
+          editing = paper.id;
+          nameInput.value = paper.name;
+          linkInput.value = paper.link;
+          summaryInput.value = paper.summary;
+          form.hidden = false;
+        };
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "retro-button";
+        deleteButton.textContent = "Delete";
+
+        deleteButton.onclick = async () => {
+          if (!confirm("Delete this paper?")) return;
+
+          const { error } = await db
+            .from("papers")
+            .delete()
+            .eq("id", paper.id);
+
+          if (error) {
+            alert("Delete failed: " + error.message);
+            return;
+          }
+
+          await loadPapers();
+        };
+
+        actions.append(editButton, deleteButton);
+        row.append(actions);
+      }
+
       tbody.append(row);
     });
   }
-  document.getElementById('add-button').addEventListener('click', () => {
-    if (!form.hidden) { closeForm(); return; }
-    form.reset(); editing = null; openForm();
+
+  /*
+   * OPEN ADD PAPER FORM
+   */
+  addButton.addEventListener("click", () => {
+    if (!isAdmin) return;
+
+    editing = null;
+    form.reset();
+    form.hidden = false;
+    nameInput.focus();
   });
-  document.getElementById('cancel-button').addEventListener('click', closeForm);
-  form.addEventListener('submit', event => {
+
+  /*
+   * CANCEL FORM
+   */
+  document.getElementById("cancel-button")
+    .addEventListener("click", () => {
+      form.reset();
+      form.hidden = true;
+      editing = null;
+    });
+
+  /*
+   * SAVE PAPER TO SUPABASE
+   *
+   * INSERT creates a new database record.
+   * UPDATE modifies an existing record.
+   *
+   * RLS checks the authenticated user UUID
+   * before allowing either operation.
+   */
+  form.addEventListener("submit", async event => {
     event.preventDefault();
+
+    if (!isAdmin) return;
+
     let url;
+
     try {
       url = new URL(linkInput.value.trim());
-      if (!['https:', 'http:'].includes(url.protocol)) throw new Error('Invalid URL');
-    } catch (error) { alert('Please enter a valid http:// or https:// link.'); return; }
-    const entry = {name: nameInput.value.trim(), link: url.href, summary: summaryInput.value.trim()};
-    if (!entry.name || !entry.summary) return;
-    const previous = papers.slice();
-    if (editing === null) papers.push(entry); else papers[editing] = entry;
-    if (!persist()) { papers = previous; return; }
-    closeForm(); render();
+
+      if (!["https:", "http:"].includes(url.protocol)) {
+        throw new Error("Invalid URL");
+      }
+    } catch {
+      alert("Please enter a valid paper URL.");
+      return;
+    }
+
+    const entry = {
+      name: nameInput.value.trim(),
+      link: url.href,
+      summary: summaryInput.value.trim()
+    };
+
+    let result;
+
+    if (editing === null) {
+      result = await db
+        .from("papers")
+        .insert(entry);
+    } else {
+      result = await db
+        .from("papers")
+        .update(entry)
+        .eq("id", editing);
+    }
+
+    if (result.error) {
+      alert("Save failed: " + result.error.message);
+      return;
+    }
+
+    form.reset();
+    form.hidden = true;
+    editing = null;
+
+    await loadPapers();
   });
-  render();
+
+  /*
+   * INITIALIZE WEBSITE
+   *
+   * Check login status and load public papers.
+   */
+  async function initialize() {
+    addButton.hidden = true;
+    loginButton.hidden = true;
+    logoutButton.hidden = true;
+
+    await checkAdmin();
+    await loadPapers();
+  }
+
+  initialize();
 })();
 </script>
+
 </body>
 </html>
 
